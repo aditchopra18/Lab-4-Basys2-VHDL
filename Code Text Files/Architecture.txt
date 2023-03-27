@@ -1,0 +1,339 @@
+architecture Behavioural of lab4 is
+	signal second: integer range 0 to 20000 := 0; --note 50000000/200=250000 
+	signal diffsecond: integer range 0 to 250000 := 0;
+	signal segmentsth: integer range 0 to 500 := 0;
+begin
+	process(clk,rst)
+		variable segmentcount : std_logic_vector(2 downto 0);
+		variable count : std_logic_vector(6 downto 0);--for second
+		variable count3 : std_logic_vector(6 downto 0);--for minutes
+		variable count4 : std_logic_vector(5 downto 0);--for hours
+	begin
+		if (rst='1') then
+			second <= 0;
+			diffsecond <= 0;
+			segmentsth <= 0;
+			segmentcount:="000";
+			count:="0000000";
+			count3:="0000000";
+			count4:="000000";
+		elsif (rising_edge(clk)) then --the clock takes one step
+			segmentsth <= segmentsth + 1;--second time takes one step
+			if (segmentsth = 500) then --wait for some time to increment segment selection
+				segmentcount := segmentcount +1;
+					if (segmentcount = "100") then
+						segmentcount:= "000";
+					end if;
+			end if;
+			
+			if (rst2 = '0') then
+				second <= second + 1;--time takes one step
+				if (second = 20000) then --1 second passed
+					count := count+1;
+						if(count = "111100") then --60 seonds
+							count3 := count3+1;
+							count:="0000000";
+							if(count3 = "111100") then --60 minutes
+								count4 := count4+1;
+								if (count4 = "011000") then
+									count4:="000000";
+								end if;
+								count3:="0000000";
+							end if;
+						end if;
+				end if;			
+			elsif (rst2 = '1') then
+				diffsecond <= diffsecond + 1;--time takes one step
+				if (diffsecond = 250000) then --1 diffsecond passed
+					count := count+1;
+						if(count = "111100") then --60 seonds
+							count3 := count3+1;
+							count:="0000000";
+							if(count3 = "111100") then --60 minutes
+								count4 := count4+1;
+								count3:="0000000";
+								if (count4 = "011000") then
+									count4:="000000";
+								end if;
+							end if;
+						end if;
+				end if;
+			end if;
+			
+		end if;
+		case segmentcount is
+			 when "000" => 
+				segment <= "1110";
+				case count3 is
+					when "0000000" => display <= "0000001";-- shows 0
+					when "0000001" => display <= "1001111";-- shows 1
+					when "0000010" => display <= "0010010";-- shows 2
+					when "0000011" => display <= "0000110";-- shows 3
+					when "0000100" => display <= "1001100";-- shows 4
+					when "0000101" => display <= "0100100";-- shows 5
+					when "0000110" => display <= "0100000";-- shows 6
+					when "0000111" => display <= "0001111";-- shows 7
+					when "0001000" => display <= "0000000";-- shows 8
+					when "0001001" => display <= "0000100";-- shows 9
+					--10
+					when "0001010" => display <= "0000001";-- shows 0 
+					when "0001011" => display <= "1001111";-- shows 1
+					when "0001100" => display <= "0010010";-- shows 2
+					when "0001101" => display <= "0000110";-- shows 3
+					when "0001110" => display <= "1001100";-- shows 4
+					when "0001111" => display <= "0100100";-- shows 5
+					when "0010000" => display <= "0100000";-- shows 6
+					when "0010001" => display <= "0001111";-- shows 7
+					when "0010010" => display <= "0000000";-- shows 8
+					when "0010011" => display <= "0000100";-- shows 9
+					--20
+					when "0010100" => display <= "0000001";-- shows 0 
+					when "0010101" => display <= "1001111";-- shows 1
+					when "0010110" => display <= "0010010";-- shows 2
+					when "0010111" => display <= "0000110";-- shows 3
+					when "0011000" => display <= "1001100";-- shows 4
+					when "0011001" => display <= "0100100";-- shows 5
+					when "0011010" => display <= "0100000";-- shows 6
+					when "0011011" => display <= "0001111";-- shows 7
+					when "0011100" => display <= "0000000";-- shows 8
+					when "0011101" => display <= "0000100";-- shows 9
+					--30
+					when "0011110" => display <= "0000001";-- shows 0 
+					when "0011111" => display <= "1001111";-- shows 1
+					when "0100000" => display <= "0010010";-- shows 2
+					when "0100001" => display <= "0000110";-- shows 3
+					when "0100010" => display <= "1001100";-- shows 4
+					when "0100011" => display <= "0100100";-- shows 5
+					when "0100100" => display <= "0100000";-- shows 6
+					when "0100101" => display <= "0001111";-- shows 7
+					when "0100110" => display <= "0000000";-- shows 8
+					when "0100111" => display <= "0000100";-- shows 9
+					--40
+					when "0101000" => display <= "0000001";-- shows 0 
+					when "0101001" => display <= "1001111";-- shows 1
+					when "0101010" => display <= "0010010";-- shows 2
+					when "0101011" => display <= "0000110";-- shows 3
+					when "0101100" => display <= "1001100";-- shows 4
+					when "0101101" => display <= "0100100";-- shows 5
+					when "0101110" => display <= "0100000";-- shows 6
+					when "0101111" => display <= "0001111";-- shows 7
+					when "0110000" => display <= "0000000";-- shows 8
+					when "0110001" => display <= "0000100";-- shows 9
+					--50
+					when "0110010" => display <= "0000001";-- shows 0 
+					when "0110011" => display <= "1001111";-- shows 1
+					when "0110100" => display <= "0010010";-- shows 2
+					when "0110101" => display <= "0000110";-- shows 3
+					when "0110110" => display <= "1001100";-- shows 4
+					when "0110111" => display <= "0100100";-- shows 5
+					when "0111000" => display <= "0100000";-- shows 6
+					when "0111001" => display <= "0001111";-- shows 7
+					when "0111010" => display <= "0000000";-- shows 8
+					when "0111011" => display <= "0000100";-- shows 9
+					when others => display <= "1111111";
+				end case;
+			 when "001" => 
+				segment <= "1101";
+				case count3 is
+					when "0000000" => display <= "0000001";-- shows 0
+					when "0000001" => display <= "0000001";-- shows 0
+					when "0000010" => display <= "0000001";-- shows 0
+					when "0000011" => display <= "0000001";-- shows 0
+					when "0000100" => display <= "0000001";-- shows 0
+					when "0000101" => display <= "0000001";-- shows 0
+					when "0000110" => display <= "0000001";-- shows 0
+					when "0000111" => display <= "0000001";-- shows 0
+					when "0001000" => display <= "0000001";-- shows 0
+					when "0001001" => display <= "0000001";-- shows 0
+					--10
+					when "0001010" => display <= "1001111";-- shows 1
+					when "0001011" => display <= "1001111";-- shows 1
+					when "0001100" => display <= "1001111";-- shows 1
+					when "0001101" => display <= "1001111";-- shows 1
+					when "0001110" => display <= "1001111";-- shows 1
+					when "0001111" => display <= "1001111";-- shows 1
+					when "0010000" => display <= "1001111";-- shows 1
+					when "0010001" => display <= "1001111";-- shows 1
+					when "0010010" => display <= "1001111";-- shows 1
+					when "0010011" => display <= "1001111";-- shows 1
+					--20
+					when "0010100" => display <= "0010010";-- shows 2
+					when "0010101" => display <= "0010010";-- shows 2
+					when "0010110" => display <= "0010010";-- shows 2
+					when "0010111" => display <= "0010010";-- shows 2
+					when "0011000" => display <= "0010010";-- shows 2
+					when "0011001" => display <= "0010010";-- shows 2
+					when "0011010" => display <= "0010010";-- shows 2
+					when "0011011" => display <= "0010010";-- shows 2
+					when "0011100" => display <= "0010010";-- shows 2
+					when "0011101" => display <= "0010010";-- shows 2
+					--30
+					when "0011110" => display <= "0000110";-- shows 3
+					when "0011111" => display <= "0000110";-- shows 3
+					when "0100000" => display <= "0000110";-- shows 3
+					when "0100001" => display <= "0000110";-- shows 3
+					when "0100010" => display <= "0000110";-- shows 3
+					when "0100011" => display <= "0000110";-- shows 3
+					when "0100100" => display <= "0000110";-- shows 3
+					when "0100101" => display <= "0000110";-- shows 3
+					when "0100110" => display <= "0000110";-- shows 3
+					when "0100111" => display <= "0000110";-- shows 3
+					--40
+					when "0101000" => display <= "1001100";-- shows 4
+					when "0101001" => display <= "1001100";-- shows 4
+					when "0101010" => display <= "1001100";-- shows 4
+					when "0101011" => display <= "1001100";-- shows 4
+					when "0101100" => display <= "1001100";-- shows 4
+					when "0101101" => display <= "1001100";-- shows 4
+					when "0101110" => display <= "1001100";-- shows 4
+					when "0101111" => display <= "1001100";-- shows 4
+					when "0110000" => display <= "1001100";-- shows 4
+					when "0110001" => display <= "1001100";-- shows 4
+					--50
+					when "0110010" => display <= "0100100";-- shows 5
+					when "0110011" => display <= "0100100";-- shows 5
+					when "0110100" => display <= "0100100";-- shows 5
+					when "0110101" => display <= "0100100";-- shows 5
+					when "0110110" => display <= "0100100";-- shows 5
+					when "0110111" => display <= "0100100";-- shows 5
+					when "0111000" => display <= "0100100";-- shows 5
+					when "0111001" => display <= "0100100";-- shows 5
+					when "0111010" => display <= "0100100";-- shows 5
+					when "0111011" => display <= "0100100";-- shows 5
+					when others => display <= "1111111";
+				end case;
+			 when "010" => 
+				segment <= "1011";
+				case count4 is
+					when "000000" => display <= "0000001";-- 00 shows 0
+					when "000001" => display <= "1001111";-- 01 shows 1
+					when "000010" => display <= "0010010";-- 02
+					when "000011" => display <= "0000110";-- 03
+					when "000100" => display <= "1001100";-- 04
+					when "000101" => display <= "0100100";-- 05
+					when "000110" => display <= "0100000";-- 06
+					when "000111" => display <= "0001111";-- 07
+					when "001000" => display <= "0000000";-- 08
+					when "001001" => display <= "0000100";-- 09
+					--10
+					when "001010" => display <= "0000001";-- 10
+					when "001011" => display <= "1001111";
+					when "001100" => display <= "0010010";
+					when "001101" => display <= "0000110";
+					when "001110" => display <= "1001100";
+					when "001111" => display <= "0100100";
+					when "010000" => display <= "0100000";
+					when "010001" => display <= "0001111";
+					when "010010" => display <= "0000000";
+					when "010011" => display <= "0000100";
+					--20
+					when "010100" => display <= "0000001";-- 20
+					when "010101" => display <= "1001111";-- 21
+					when "010110" => display <= "0010010";-- 22
+					when "010111" => display <= "0000110";-- 23
+					when others => display <= "1111111";
+				end case;
+			 when "011" => 
+				segment <= "0111";
+				case count4 is
+					when "000000" => display <= "0000001";-- shows 0
+					when "000001" => display <= "0000001";-- shows 0
+					when "000010" => display <= "0000001";-- shows 0
+					when "000011" => display <= "0000001";-- shows 0
+					when "000100" => display <= "0000001";-- shows 0
+					when "000101" => display <= "0000001";-- shows 0
+					when "000110" => display <= "0000001";-- shows 0
+					when "000111" => display <= "0000001";-- shows 0
+					when "001000" => display <= "0000001";-- shows 0
+					when "001001" => display <= "0000001";-- shows 0
+					--10
+					when "001010" => display <= "1001111";-- shows 1
+					when "001011" => display <= "1001111";-- shows 1
+					when "001100" => display <= "1001111";-- shows 1
+					when "001101" => display <= "1001111";-- shows 1
+					when "001110" => display <= "1001111";-- shows 1
+					when "001111" => display <= "1001111";-- shows 1
+					when "010000" => display <= "1001111";-- shows 1
+					when "010001" => display <= "1001111";-- shows 1
+					when "010010" => display <= "1001111";-- shows 1
+					when "010011" => display <= "1001111";-- shows 1
+					--20
+					when "010100" => display <= "0010010";-- shows 2
+					when "010101" => display <= "0010010";-- shows 2
+					when "010110" => display <= "0010010";-- shows 2
+					when "010111" => display <= "0010010";-- shows 2
+					when others => display <= "1111111";
+				end case;
+			 when others => segment <= "1111"; --nothing lights up
+		end case;
+	
+		case count is 
+			when "0000000" => light <= "000000";
+			when "0000001" => light <= "000001";
+			when "0000010" => light <= "000010";
+			when "0000011" => light <= "000011";
+			when "0000100" => light <= "000100";
+			when "0000101" => light <= "000101";
+			when "0000110" => light <= "000110";
+			when "0000111" => light <= "000111";
+			when "0001000" => light <= "001000";
+			when "0001001" => light <= "001001";
+			--10
+			when "0001010" => light <= "001010";
+			when "0001011" => light <= "001011";
+			when "0001100" => light <= "001100";
+			when "0001101" => light <= "001101";
+			when "0001110" => light <= "001110";
+			when "0001111" => light <= "001111";
+			when "0010000" => light <= "010000";
+			when "0010001" => light <= "010001";
+			when "0010010" => light <= "010010";
+			when "0010011" => light <= "010011";
+			--20
+			when "0010100" => light <= "010100";
+			when "0010101" => light <= "010101";
+			when "0010110" => light <= "010110";
+			when "0010111" => light <= "010111";
+			when "0011001" => light <= "011001";
+			when "0011010" => light <= "011010";
+			when "0011011" => light <= "011011";
+			when "0011100" => light <= "011100";
+			when "0011101" => light <= "011101";
+			when "0011110" => light <= "011110";
+			--30
+			when "0011111" => light <= "011111";
+			when "0100000" => light <= "100000";
+			when "0100001" => light <= "100001";
+			when "0100010" => light <= "100010";
+			when "0100011" => light <= "100011";
+			when "0100100" => light <= "100100";
+			when "0100101" => light <= "100101";
+			when "0100110" => light <= "100110";
+			when "0100111" => light <= "100111";
+			when "0101000" => light <= "101000";
+			--40
+			when "0101001" => light <= "101001";
+			when "0101010" => light <= "101010";
+			when "0101011" => light <= "101011";
+			when "0101100" => light <= "101100";
+			when "0101101" => light <= "101101";
+			when "0101110" => light <= "101110";
+			when "0101111" => light <= "101111";
+			when "0110000" => light <= "110000";
+			when "0110001" => light <= "110001";
+			when "0110010" => light <= "110010";
+			--50
+			when "0110011" => light <= "110011";
+			when "0110100" => light <= "110100";
+			when "0110101" => light <= "110101";
+			when "0110110" => light <= "110110";
+			when "0110111" => light <= "110111";
+			when "0111000" => light <= "111000";
+			when "0111001" => light <= "111001";
+			when "0111010" => light <= "111010";
+			when "0111011" => light <= "111011";
+			when "0111100" => light <= "111100";
+			when others => light <= "111111";
+		end case;
+	end process;
+end Behavioural;

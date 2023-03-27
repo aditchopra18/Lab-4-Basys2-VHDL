@@ -1,0 +1,12 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity lab4 is
+port(clk : in std_logic;
+     rst : in std_logic;
+	  rst2 : in std_logic;
+	  display : out std_logic_vector(6 downto 0);--this is for displaying the time
+	  light : out std_logic_vector(5 downto 0); --this is for displaying the led to represent 60 seconds. 2^6=64
+	  segment : out std_logic_vector(3 downto 0));
+end lab4;
