@@ -1,0 +1,28 @@
+//! **************************************************************************
+// Written by: Map P.20131013 on Fri Mar 03 19:41:15 2023
+//! **************************************************************************
+
+SCHEMATIC START;
+COMP "display<6>" LOCATE = SITE "L14" LEVEL 1;
+COMP "light<0>" LOCATE = SITE "M5" LEVEL 1;
+COMP "clk" LOCATE = SITE "B8" LEVEL 1;
+COMP "segment<0>" LOCATE = SITE "F12" LEVEL 1;
+COMP "segment<1>" LOCATE = SITE "J12" LEVEL 1;
+COMP "segment<2>" LOCATE = SITE "M13" LEVEL 1;
+COMP "segment<3>" LOCATE = SITE "K14" LEVEL 1;
+COMP "rst2" LOCATE = SITE "C11" LEVEL 1;
+COMP "light<1>" LOCATE = SITE "M11" LEVEL 1;
+COMP "light<2>" LOCATE = SITE "P7" LEVEL 1;
+COMP "light<3>" LOCATE = SITE "P6" LEVEL 1;
+COMP "light<4>" LOCATE = SITE "N5" LEVEL 1;
+COMP "light<5>" LOCATE = SITE "N4" LEVEL 1;
+COMP "display<0>" LOCATE = SITE "M12" LEVEL 1;
+COMP "display<1>" LOCATE = SITE "L13" LEVEL 1;
+COMP "display<2>" LOCATE = SITE "P12" LEVEL 1;
+COMP "rst" LOCATE = SITE "G12" LEVEL 1;
+COMP "display<3>" LOCATE = SITE "N11" LEVEL 1;
+COMP "display<4>" LOCATE = SITE "N14" LEVEL 1;
+COMP "display<5>" LOCATE = SITE "H12" LEVEL 1;
+NET "clk_BUFGP/IBUFG" BEL "clk_BUFGP/BUFG.GCLKMUX" USELOCALCONNECT;
+SCHEMATIC END;
+
